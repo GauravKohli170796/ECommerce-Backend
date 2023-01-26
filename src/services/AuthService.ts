@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@tsed/di";
 import { MongooseModel } from "@tsed/mongoose";
-import jwt, { Secret } from "jsonwebtoken";
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import { ROLES } from "../enums/authEnum";
-import { ISignUpRequest } from "../interfaces/authInterfaces";
+import { ISignUpRequest, ITokenPayload } from "../interfaces/authInterfaces";
 import { UserModel } from "../models/UserModel";
 
 @Injectable()
@@ -30,8 +30,13 @@ export class AuthService {
 
 
     async generateJWTToken(email: string, role: ROLES): Promise<string> {
-        const tokenPayload = { email, role };
+        const tokenPayload:ITokenPayload= { email, role };
         const token = await jwt.sign(tokenPayload, process.env.TOKEN_KEY as Secret);
         return token;
+    }
+
+    async decodeJwtGenerate (jwtToken: string):Promise<any> {
+        const userDetails = await jwt.verify(jwtToken,process.env.TOKEN_KEY as Secret) as JwtPayload;
+        return userDetails;
     }
 }

@@ -28,6 +28,9 @@ import { config } from "./config/index";
     "/api/v1/auth": [
 			`${__dirname}/controllers/auth/*.ts`,
 		],
+    "/api/v1/user": [
+			`${__dirname}/controllers/*/*.ts`,
+		]
   },
   swagger: [
     {

@@ -1,3 +1,5 @@
+import { ROLES } from "../enums/authEnum";
+
 export interface ILoginRequest{
     email: string;
     password: string;
@@ -20,4 +22,11 @@ export interface ISignUpRequest{
     name:string;
     phoneNumber:string;
 }
+
+export interface ITokenPayload {
+    email:string;
+    role : ROLES;
+    iat ?: number
+}
+
 
