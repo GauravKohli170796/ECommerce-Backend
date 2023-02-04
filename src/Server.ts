@@ -19,7 +19,7 @@ import { config } from "./config/index";
   httpsPort: false, // CHANGE
   componentsScan: false,
   mount: {
-    "/api/v1/test": [
+    "/api/v1/healthCheck": [
 			`${__dirname}/controllers/rest/*.ts`,
 		],
     "/api/v1/product": [
@@ -29,7 +29,7 @@ import { config } from "./config/index";
 			`${__dirname}/controllers/auth/*.ts`,
 		],
     "/api/v1/user": [
-			`${__dirname}/controllers/*/*.ts`,
+			`${__dirname}/controllers/cartWishList/*.ts`,
 		]
   },
   swagger: [

@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 import { IGoogleAuthRequest, ILoginRequest, ISignUpRequest, ITokenResponse } from "../../interfaces/authInterfaces";
 import { AuthService } from "../../services/AuthService";
 
-@Controller("/")
+@Controller("")
 export class AuthController {
   constructor(@Inject(AuthService) private authService: AuthService) { }
   @Post("/Login")

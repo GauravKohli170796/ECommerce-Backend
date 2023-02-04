@@ -2,11 +2,14 @@ import { Inject, Injectable } from "@tsed/di";
 import { NotFound } from "@tsed/exceptions";
 import { MongooseModel } from "@tsed/mongoose";
 import { IAddProductRequest, IUpdateProductRequest } from "../interfaces/productInterface";
+import { CategoryModel } from "../models/CategoryModel";
 import { ProductModel } from "../models/ProductModel";
 
 @Injectable()
 export class ProductService {
-  constructor(@Inject(ProductModel) private productModel: MongooseModel<ProductModel>) { }
+  constructor(@Inject(ProductModel) private productModel: MongooseModel<ProductModel>,
+    @Inject(CategoryModel) private categoryModel: MongooseModel<CategoryModel>
+  ) { }
 
   // This api will return latest created products for UI latest section and 
   // all products in pagination fashion
@@ -19,12 +22,12 @@ export class ProductService {
           latestProduct: [
             { $sort: { createdAt: -1 } },
             { $limit: 10 },
-            { $project: { name: 1, description: 1, images: 1, discount: 1 ,price:1} }
+            { $project: { name: 1, description: 1, images: 1, discount: 1, price: 1 } }
           ],
           allProducts: [
             { $skip: (limit * page) },
             { $limit: limit },
-            { $project: { name: 1, description: 1, images: 1, discount: 1 ,price:1} }
+            { $project: { name: 1, description: 1, images: 1, discount: 1, price: 1 } }
           ],
           totalProducts: [
             {
@@ -37,9 +40,9 @@ export class ProductService {
     return response[0];
   }
 
-  async getProductById(id: string): Promise<unknown>{
+  async getProductById(id: string): Promise<unknown> {
     const response = await this.productModel.findById(id);
-    if(!response){
+    if (!response) {
       throw new NotFound("Product not found with this id");
     }
     return response;
@@ -55,9 +58,18 @@ export class ProductService {
 
   async deleteProduct(id: string): Promise<unknown> {
     const deleteResponse = await this.productModel.deleteOne({ _id: id });
-    if(deleteResponse.deletedCount === 0){
+    if (deleteResponse.deletedCount === 0) {
       throw new NotFound("Product not found with this id");
     }
     return deleteResponse;
+  }
+
+  async getAllCategories(): Promise<string[]> {
+    const category = await this.categoryModel.find();
+    return category[0]?.categories || [];
+  }
+
+  async addCategory(category: string): Promise<unknown>{
+    return await this.categoryModel.updateOne({},{ $push: { "categories": category }},{ upsert: true })
   }
 }

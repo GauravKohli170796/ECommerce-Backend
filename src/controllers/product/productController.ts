@@ -2,18 +2,28 @@ import { MultipartFile, PlatformMulterFile } from "@tsed/common";
 import { Controller, Inject } from "@tsed/di";
 import { BodyParams, PathParams } from "@tsed/platform-params";
 import { Delete, Description, Get, Post, Put, Required } from "@tsed/schema";
-import { IAddProductRequest } from "../../interfaces/productInterface";
+import { IAddProductRequest, ICategoryReq } from "../../interfaces/productInterface";
 import { CloudinaryService } from "../../services/CloudinaryService";
 import { ProductService } from "../../services/ProductService";
 
 @Controller("")
 export class ProductController {
   constructor(@Inject(ProductService) private productService: ProductService,
-              @Inject(CloudinaryService) private cloudinaryService:CloudinaryService) { }
+    @Inject(CloudinaryService) private cloudinaryService: CloudinaryService) { }
   @Get("/:limit/:page")
   @Description("Return a list of products")
-  get(@PathParams("limit") @Required() limit: string,@PathParams("page") @Required() page: string) {
-    return this.productService.getAllProducts(parseInt(limit),parseInt(page));
+  get(@PathParams("limit") @Required() limit: string, @PathParams("page") @Required() page: string) {
+    return this.productService.getAllProducts(parseInt(limit), parseInt(page));
+  }
+
+  @Get("/getAllCategories")
+  getAllCategories(): Promise<string[]> {
+    return this.productService.getAllCategories();
+  }
+
+  @Put("/addNewCategories")
+  addNewCategories(@BodyParams() @Required() categoryReq: ICategoryReq) {
+    return this.productService.addCategory(categoryReq.category);
   }
 
   @Get("/:id")
@@ -41,5 +51,6 @@ export class ProductController {
   deleteProduct(@PathParams("id") @Required() id: string) {
     return this.productService.deleteProduct(id);
   }
+
 
 }

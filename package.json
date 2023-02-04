@@ -10,7 +10,8 @@
     "test:unit": "cross-env NODE_ENV=test mocha",
     "test:coverage": "cross-env NODE_ENV=test nyc mocha",
     "test:lint": "eslint '**/*.{ts,js}'",
-    "test:lint:fix": "eslint '**/*.{ts,js}' --fix"
+    "test:lint:fix": "eslint '**/*.{ts,js}' --fix",
+    "devStart": "./node_modules/.bin/tsnd src/index.ts"
   },
   "dependencies": {
     "@tsed/ajv": "^6.132.1",

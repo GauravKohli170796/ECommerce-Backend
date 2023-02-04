@@ -1,10 +1,10 @@
-import {Controller} from "@tsed/di";
-import {Get} from "@tsed/schema";
+import { Controller } from "@tsed/di";
+import { Get } from "@tsed/schema";
 
-@Controller("/hello-world")
+@Controller("")
 export class HelloWorldController {
-  @Get("/")
+  @Get("/checkServerHealth")
   get() {
-    return "hello";
+    return "Server is up and running !.";
   }
 }

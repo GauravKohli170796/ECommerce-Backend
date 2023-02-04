@@ -9,7 +9,7 @@ export class CartService {
     constructor(@Inject(CartModel) private cartModel: MongooseModel<CartModel>) { }
 
     async getUserCartItems(email: string): Promise<unknown> {
-        const response = await this.cartModel.find({ email: email }).populate("productId",{name:1,description:1,images:{$slice:1}});
+        const response = await this.cartModel.find({ email: email }).populate("productId",{name:1,description:1,price:1,discount:1,images:{$slice:1}});
         return response;
     }
 
@@ -23,7 +23,7 @@ export class CartService {
     }
 
     async deleteItemFromUserCart(email:string,id: string): Promise<unknown> {
-        const deleteResponse = await this.cartModel.deleteOne({ _id: id ,email:email});
+        const deleteResponse = await this.cartModel.deleteOne({ id: id ,email:email});
         if (deleteResponse.deletedCount === 0) {
             throw new NotFound("Cart Item not found with this id");
         }

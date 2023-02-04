@@ -1,5 +1,6 @@
 import { Model, ObjectID } from "@tsed/mongoose";
 import { Default, Max, Min, Property, Required } from "@tsed/schema";
+import { SIZES } from "../enums/productEnums";
 
 @Model()
 export class ProductModel {
@@ -49,4 +50,11 @@ export class ProductModel {
   @Required()  
   productDetails: Record<string, unknown>;
 
+  @Property()
+  @Required()
+  sizes: SIZES[]
+
+  @Property()
+  @Required()
+  colors: string[]
 }

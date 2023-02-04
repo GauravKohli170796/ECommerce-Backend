@@ -9,6 +9,8 @@ export interface IAddProductRequest{
     images?: string[];
     discount?: number;
     productDetails: unknown;
+    colors: string[];
+    sizes: string[]
 }
 export interface IUpdateProductRequest{
     name?: string;
@@ -19,6 +21,8 @@ export interface IUpdateProductRequest{
     images?: string[];
     discount?: number;
     productDetails?: unknown;
+    colors?: string[];
+    sizes?: string []
 }
 
 export interface ICartItem {
@@ -30,4 +34,8 @@ export interface ICartItem {
 
 export interface IWishListItem {
     productId: string;
+}
+
+export interface ICategoryReq{
+    category: string
 }
