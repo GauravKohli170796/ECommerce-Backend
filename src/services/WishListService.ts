@@ -15,7 +15,7 @@ export class WishListService {
 
     async addItemToUserWishList(email: string, wishListItem: IWishListItem): Promise<unknown> {
         const addWishListItem = { email: email, ...wishListItem };
-        return await this.wishListModel.create(addWishListItem);
+        return await (await this.wishListModel.create(addWishListItem)).populate("productId", { name: 1, description: 1, images: { $slice: 1 } });
     }
 
     async deleteItemFromUserWishList(email: string, id: string): Promise<unknown> {

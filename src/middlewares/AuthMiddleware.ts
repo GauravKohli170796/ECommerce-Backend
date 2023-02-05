@@ -9,7 +9,8 @@ export class AuthMiddleware implements MiddlewareMethods {
   constructor(@Inject(AuthService) private authService: AuthService) { }
   use(@Req() request: Req) {
       const token = request.headers["authorization"]?.split(" ")[1];
-      if(!token){
+      console.log(token);
+      if(!(token && token.split(".").length>1)){
         throw new Unauthorized("Token is not present in headers.");
       }
       this.authService.decodeJwtGenerate(token).then((userDetails: ITokenPayload)=>{

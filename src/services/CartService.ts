@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@tsed/di";
 import { NotFound } from "@tsed/exceptions";
 import { MongooseModel } from "@tsed/mongoose";
-import { ICartItem } from "../interfaces/productInterface";
+import { ICartItem, ICartUpdateReq } from "../interfaces/productInterface";
 import { CartModel } from "../models/CartModel";
 
 @Injectable()
@@ -15,10 +15,10 @@ export class CartService {
 
     async addItemToUserCart(email: string, cartItem: ICartItem): Promise<unknown> {
         const addCartItem = { email: email, ...cartItem };
-        return await this.cartModel.create(addCartItem);
+        return await (await this.cartModel.create(addCartItem)).populate("productId",{name:1,description:1,price:1,discount:1,images:{$slice:1}})
     }
 
-    async updateItemOfUserCart(email:string,id: string, cartItem: ICartItem): Promise<unknown> {
+    async updateItemOfUserCart(email:string,id: string, cartItem: ICartUpdateReq): Promise<unknown> {
         return await this.cartModel.updateOne({ _id: id ,email: email}, { $set: { ...cartItem } });
     }
 

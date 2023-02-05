@@ -32,6 +32,10 @@ export interface ICartItem {
     size :SIZES
 }
 
+export interface ICartUpdateReq {
+    quantity: number
+}
+
 export interface IWishListItem {
     productId: string;
 }
