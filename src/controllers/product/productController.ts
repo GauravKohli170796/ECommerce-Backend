@@ -1,8 +1,9 @@
 import { MultipartFile, PlatformMulterFile } from "@tsed/common";
 import { Controller, Inject } from "@tsed/di";
-import { BodyParams, PathParams } from "@tsed/platform-params";
+import { BodyParams, PathParams, QueryParams } from "@tsed/platform-params";
 import { Delete, Description, Get, Post, Put, Required } from "@tsed/schema";
 import { IAddProductRequest, ICategoryReq } from "../../interfaces/productInterface";
+import { ProductModel } from "../../models/ProductModel";
 import { CloudinaryService } from "../../services/CloudinaryService";
 import { ProductService } from "../../services/ProductService";
 
@@ -19,6 +20,18 @@ export class ProductController {
   @Get("/getAllCategories")
   getAllCategories(): Promise<string[]> {
     return this.productService.getAllCategories();
+  }
+
+  @Get("/getFilteredProduct/:limit/:page")
+  @Description("Return a list of products after applying filters")
+  getProductWithFilter(@PathParams("limit") @Required() limit: string, @PathParams("page") @Required() page: string, @QueryParams("filter") @Required() filter: string): Promise<ProductModel[]> {
+    return this.productService.getProductWithFilter(parseInt(limit), parseInt(page),filter);
+  }
+
+  @Get("/getSearchedProducts")
+  @Description("Return a list of products after applying search string")
+  getSearchedProducts(@QueryParams("search") @Required() search: string): Promise<ProductModel[]> {
+    return this.productService.getSearchedProduct(search);
   }
 
   @Put("/addNewCategories")

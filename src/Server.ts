@@ -30,6 +30,9 @@ import { config } from "./config/index";
 		],
     "/api/v1/user": [
 			`${__dirname}/controllers/cartWishList/*.ts`,
+		],
+    "/api/v1/email": [
+			`${__dirname}/controllers/email/*.ts`,
 		]
   },
   swagger: [
