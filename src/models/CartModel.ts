@@ -9,7 +9,7 @@ export class CartModel {
   @ObjectID("_id")
   _id: string;
 
-    @Property()
+  @Property()
   @Required()
   @Ref(ProductModel)
   productId: Ref<ProductModel>;
