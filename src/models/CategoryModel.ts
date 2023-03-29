@@ -12,7 +12,5 @@ export class CategoryModel {
 
   @Property()
   @Required()
-  categories : string[]
-
+  categories: string[];
 }
-

@@ -4,7 +4,7 @@ import { SIZES } from "../enums/productEnums";
 import { ProductModel } from "./ProductModel";
 
 @Model()
-@MongooseIndexes([{fields: {productId: 1, email: 1}, options:{unique: 1}}])
+@MongooseIndexes([{ fields: { productId: 1, email: 1 }, options: { unique: 1 } }])
 export class CartModel {
   @ObjectID("_id")
   _id: string;
@@ -30,7 +30,5 @@ export class CartModel {
 
   @Property()
   @Required()
-  color : string
-
+  color: string;
 }
-

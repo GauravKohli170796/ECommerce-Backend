@@ -7,11 +7,13 @@ import { Server } from "../../Server";
 describe("HelloWorldController", () => {
   let request: SuperTest.SuperTest<SuperTest.Test>;
 
-  beforeEach(PlatformTest.bootstrap(Server, {
-    mount: {
-      "/": [HelloWorldController]
-    }
-  }));
+  beforeEach(
+    PlatformTest.bootstrap(Server, {
+      mount: {
+        "/": [HelloWorldController]
+      }
+    })
+  );
   beforeEach(() => {
     request = SuperTest(PlatformTest.callback());
   });
@@ -19,8 +21,8 @@ describe("HelloWorldController", () => {
   afterEach(PlatformTest.reset);
 
   it("should call GET /hello-world", async () => {
-     const response = await request.get("/api/v1/test/hello-world").expect(200);
+    const response = await request.get("/api/v1/test/hello-world").expect(200);
 
-     expect(response.text).to.eq("hello");
+    expect(response.text).to.eq("hello");
   });
 });

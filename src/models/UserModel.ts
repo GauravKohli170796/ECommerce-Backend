@@ -28,5 +28,5 @@ export class UserModel {
   @Property()
   @Required()
   @Default(ROLES.USER)
-  role : ROLES
+  role: ROLES;
 }

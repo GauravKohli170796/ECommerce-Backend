@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <p>Hello ,</p>
+    <p>Thank you for shopping with us. </p>
+    <p>Your order id is : <%= orderDetails._id %> .</p>
+    <hr>
+  
+
+    <p>Below is your order summary . You can click on Product Id to see product.</p>
+
+    <table style="width: 100%; border-collapse: collapse;font-family: 'Times New Roman', Times, serif;">
+        <tr>
+            <th style="text-align: left;border: 1px solid #dddddd;padding: 8px;">Product Id</th>
+            <th style="text-align: left;border: 1px solid #dddddd;padding: 8px;">Quantity | Size | Color</th>
+            <th style="text-align: left;border: 1px solid #dddddd;padding: 8px;">Total Price</th>
+        </tr>
+
+        <% for (var i=0; i < orderDetails.productDetails.length;i++) { %>
+            <tr>
+                <td style="text-align: left;border: 1px solid #dddddd;padding: 8px;">
+                    <a href="https://kirans-sehgal-online-shop.onrender.com/product/productDetail/<%= orderDetails.productDetails[i].productId %>"><%= orderDetails.productDetails[i].productId %></a>
+                    
+                </td>
+                <td style="text-align: left;border: 1px solid #dddddd;padding: 8px;">
+                    <%= orderDetails.productDetails[i].quantity %> | <%= orderDetails.productDetails[i].size %> | <%= orderDetails.productDetails[i].color %>
+                </td>
+                <td style="text-align: left;border: 1px solid #dddddd;padding: 8px;">
+                    <%= orderDetails.productDetails[i].price %>
+                </td>
+            </tr>
+            <% } %>
+    </table>
+    <hr>
+    <p>You can check the updated order status on our website. We will notify updates through emails.</p>
+
+</body>
+
+</html>

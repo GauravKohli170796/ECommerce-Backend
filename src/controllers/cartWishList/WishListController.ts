@@ -8,9 +8,9 @@ import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
 import { WishListService } from "../../services/WishListService";
 
 @Controller("")
-@UseBefore(AuthMiddleware) 
+@UseBefore(AuthMiddleware)
 export class WishListController {
-  constructor(@Inject(WishListService) private wishListService: WishListService) { }
+  constructor(@Inject(WishListService) private wishListService: WishListService) {}
 
   @Get("/getWishListItems")
   get(@Req() req: Req) {
@@ -18,13 +18,19 @@ export class WishListController {
     return this.wishListService.getUserWishListItems(userDetails.email);
   }
   @Post("/addWishListItem")
-  addCartItem(@Req() req: Req,@BodyParams() @Required() cartItem : IWishListItem) {
+  addCartItem(@Req() req: Req, @BodyParams() @Required() cartItem: IWishListItem) {
     const userDetails = req.user as ITokenPayload;
-    return this.wishListService.addItemToUserWishList(userDetails.email,cartItem);
+    return this.wishListService.addItemToUserWishList(userDetails.email, cartItem);
   }
   @Delete("/deleteWishListItem/:id")
-  deleteCartItem(@Req() req: Req,@PathParams("id") @Required() id: string) {
+  deleteCartItem(@Req() req: Req, @PathParams("id") @Required() id: string) {
     const userDetails = req.user as ITokenPayload;
-    return this.wishListService.deleteItemFromUserWishList(userDetails.email,id);
+    return this.wishListService.deleteItemFromUserWishList(userDetails.email, id);
+  }
+
+  @Delete("/deleteUserWishList")
+  deleteCart(@Req() req: Req) {
+    const userDetails = req.user as ITokenPayload;
+    return this.wishListService.deleteUserWishList(userDetails.email);
   }
 }

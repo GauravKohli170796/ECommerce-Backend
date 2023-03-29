@@ -9,9 +9,9 @@ import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
 import { OrderService } from "../../services/OrderService";
 
 @Controller("")
-@UseBefore(AuthMiddleware) 
+@UseBefore(AuthMiddleware)
 export class OrdersController {
-  constructor(@Inject(OrderService) private orderService: OrderService){}
+  constructor(@Inject(OrderService) private orderService: OrderService) {}
   @Get("/getAllUserOrders")
   get(@Req() req: Req) {
     const userDetails = req.user as ITokenPayload;
@@ -19,24 +19,31 @@ export class OrdersController {
   }
 
   @Get("/getOrdersByOrderId/:orderId")
-  getOrdersByOrderId(@PathParams("orderId") @Required() orderId: string){
+  getOrdersByOrderId(@PathParams("orderId") @Required() orderId: string) {
     return this.orderService.getOrdersByOrderId(orderId);
   }
 
-  //@UseBefore(AdminMiddleware) 
+  //@UseBefore(AdminMiddleware)
   @Get("/getAllOrdersByStatus/:limit/:page/:orderStatus")
-  getAllOrdersByStatus(@PathParams("limit") @Required() limit: string, @PathParams("page") @Required() page:string,@PathParams("orderStatus") @Required() orderStatus : ORDER_STATUS){
-    return this.orderService.getAllOrdersByStatus(orderStatus,parseInt(page),parseInt(limit));
+  getAllOrdersByStatus(
+    @PathParams("limit") @Required() limit: string,
+    @PathParams("page") @Required() page: string,
+    @PathParams("orderStatus") @Required() orderStatus: ORDER_STATUS
+  ) {
+    return this.orderService.getAllOrdersByStatus(orderStatus, parseInt(page), parseInt(limit));
   }
 
   @Put("/updateOrderStatus/:orderId")
-  updateOrderStatus(@PathParams("orderId") @Required() orderId: string,@BodyParams() @Required() orderStatusReq: IUpdateOrderStatus){
-    return this.orderService.updateOrderStatus(orderId,orderStatusReq.orderStatus);
+  updateOrderStatus(
+    @PathParams("orderId") @Required() orderId: string,
+    @BodyParams() @Required() orderStatusReq: IUpdateOrderStatus
+  ) {
+    return this.orderService.updateOrderStatus(orderId, orderStatusReq.orderStatus);
   }
 
   @Post("/addOrder")
-    addOrder(@Req() req: Req,@BodyParams() @Required() orderDetails: IAddOrderRequest){
-      const userDetails = req.user as ITokenPayload;
-      return this.orderService.addOrder({...orderDetails,email: userDetails.email});
+  addOrder(@Req() req: Req, @BodyParams() @Required() orderDetails: IAddOrderRequest) {
+    const userDetails = req.user as ITokenPayload;
+    return this.orderService.addOrder(userDetails, { ...orderDetails, email: userDetails.email });
   }
 }

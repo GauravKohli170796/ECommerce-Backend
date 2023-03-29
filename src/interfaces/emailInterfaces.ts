@@ -1,4 +1,9 @@
+export enum EmailTypes {
+  SIGNUP = "SIGNUP",
+  FORGET_PASSWORD = "FORGET_PASSWORD"
+}
 export interface IEmailBody {
-    email: string;
-    type: string;
-  }
+  otp: string;
+  type: EmailTypes;
+  email: string;
+}

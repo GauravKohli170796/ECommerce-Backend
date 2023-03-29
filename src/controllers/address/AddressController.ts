@@ -8,9 +8,9 @@ import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
 import { AddressService } from "../../services/AddressService";
 
 @Controller("")
-@UseBefore(AuthMiddleware) 
+@UseBefore(AuthMiddleware)
 export class AddressController {
-  constructor(@Inject(AddressService) private addressService: AddressService){}
+  constructor(@Inject(AddressService) private addressService: AddressService) {}
   @Get("/getAllUserAddress")
   get(@Req() req: Req) {
     const userDetails = req.user as ITokenPayload;
@@ -18,14 +18,18 @@ export class AddressController {
   }
 
   @Post("/addAddress")
-  updateOrInsertAddress(@Req() req: Req,@BodyParams() @Required() addressInfo : IAddressInfo){
+  updateOrInsertAddress(@Req() req: Req, @BodyParams() @Required() addressInfo: IAddressInfo) {
     const userDetails = req.user as ITokenPayload;
-     return this.addressService.addAddress({...addressInfo,email: userDetails.email});
+    return this.addressService.addAddress({ ...addressInfo, email: userDetails.email });
   }
 
   @Put("/updateAddress/:id")
-  updateAddress(@Req() req: Req,@PathParams("id") @Required() id:string,@BodyParams() @Required() addressInfo : IAddressInfo){
+  updateAddress(
+    @Req() req: Req,
+    @PathParams("id") @Required() id: string,
+    @BodyParams() @Required() addressInfo: IAddressInfo
+  ) {
     const userDetails = req.user as ITokenPayload;
-     return this.addressService.updateAddress(id,{...addressInfo,email: userDetails.email});
+    return this.addressService.updateAddress(id, { ...addressInfo, email: userDetails.email });
   }
 }

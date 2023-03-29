@@ -37,5 +37,4 @@ export class AddressModel {
   @Property()
   @Required()
   phoneNumber: string;
-
 }

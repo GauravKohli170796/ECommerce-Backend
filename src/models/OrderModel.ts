@@ -10,7 +10,6 @@ export class OrderModel {
   @ObjectID("_id")
   _id: string;
 
-
   @Property()
   @Required()
   email: string;
@@ -29,7 +28,6 @@ export class OrderModel {
   @Required()
   productDetails: IProductDetails[];
 
-
   @Property()
   @Required()
   @Enum(ORDER_STATUS)
@@ -37,13 +35,10 @@ export class OrderModel {
   orderStatus: ORDER_STATUS;
 
   @Property()
-  @Default(new Date)
+  @Default(new Date())
   createdAt: Date;
 
   @Property()
-  @Default(new Date)
+  @Default(new Date())
   updatedAt: Date;
-
-
 }
-

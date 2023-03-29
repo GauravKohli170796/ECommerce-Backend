@@ -28,11 +28,11 @@ export class ProductModel {
   quantity: number;
 
   @Property()
-  @Default(new Date)
+  @Default(new Date())
   createdAt: Date;
 
   @Property()
-  @Default(new Date)
+  @Default(new Date())
   updatedAt: Date;
 
   @Property()
@@ -45,16 +45,15 @@ export class ProductModel {
   @Default(0)
   discount: number;
 
-
   @Property()
-  @Required()  
+  @Required()
   productDetails: Record<string, unknown>;
 
   @Property()
   @Required()
-  sizes: SIZES[]
+  sizes: SIZES[];
 
   @Property()
   @Required()
-  colors: string[]
+  colors: string[];
 }

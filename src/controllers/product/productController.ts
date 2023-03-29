@@ -9,8 +9,10 @@ import { ProductService } from "../../services/ProductService";
 
 @Controller("")
 export class ProductController {
-  constructor(@Inject(ProductService) private productService: ProductService,
-    @Inject(CloudinaryService) private cloudinaryService: CloudinaryService) { }
+  constructor(
+    @Inject(ProductService) private productService: ProductService,
+    @Inject(CloudinaryService) private cloudinaryService: CloudinaryService
+  ) {}
   @Get("/:limit/:page")
   @Description("Return a list of products")
   get(@PathParams("limit") @Required() limit: string, @PathParams("page") @Required() page: string) {
@@ -24,8 +26,12 @@ export class ProductController {
 
   @Get("/getFilteredProduct/:limit/:page")
   @Description("Return a list of products after applying filters")
-  getProductWithFilter(@PathParams("limit") @Required() limit: string, @PathParams("page") @Required() page: string, @QueryParams("filter") @Required() filter: string): Promise<ProductModel[]> {
-    return this.productService.getProductWithFilter(parseInt(limit), parseInt(page),filter);
+  getProductWithFilter(
+    @PathParams("limit") @Required() limit: string,
+    @PathParams("page") @Required() page: string,
+    @QueryParams("filter") @Required() filter: string
+  ): Promise<ProductModel[]> {
+    return this.productService.getProductWithFilter(parseInt(limit), parseInt(page), filter);
   }
 
   @Get("/getSearchedProducts")
@@ -64,6 +70,4 @@ export class ProductController {
   deleteProduct(@PathParams("id") @Required() id: string) {
     return this.productService.deleteProduct(id);
   }
-
-
 }

@@ -19,27 +19,13 @@ import { config } from "./config/index";
   httpsPort: false, // CHANGE
   componentsScan: false,
   mount: {
-    "/api/v1/healthCheck": [
-			`${__dirname}/controllers/rest/*.ts`,
-		],
-    "/api/v1/product": [
-			`${__dirname}/controllers/product/*.ts`,
-		],
-    "/api/v1/auth": [
-			`${__dirname}/controllers/auth/*.ts`,
-		],
-    "/api/v1/user": [
-			`${__dirname}/controllers/cartWishList/*.ts`,
-		],
-    "/api/v1/email": [
-			`${__dirname}/controllers/email/*.ts`,
-		],
-    "/api/v1/orders": [
-			`${__dirname}/controllers/order/*.ts`,
-		],
-    "/api/v1/address": [
-			`${__dirname}/controllers/address/*.ts`,
-		]
+    "/api/v1/healthCheck": [`${__dirname}/controllers/rest/*.ts`],
+    "/api/v1/product": [`${__dirname}/controllers/product/*.ts`],
+    "/api/v1/auth": [`${__dirname}/controllers/auth/*.ts`],
+    "/api/v1/user": [`${__dirname}/controllers/cartWishList/*.ts`],
+    "/api/v1/email": [`${__dirname}/controllers/email/*.ts`],
+    "/api/v1/orders": [`${__dirname}/controllers/order/*.ts`],
+    "/api/v1/address": [`${__dirname}/controllers/address/*.ts`]
   },
   swagger: [
     {
@@ -63,9 +49,7 @@ import { config } from "./config/index";
       ejs: "ejs"
     }
   },
-  exclude: [
-    "**/*.spec.ts"
-  ]
+  exclude: ["**/*.spec.ts"]
 })
 export class Server {
   @Inject()
