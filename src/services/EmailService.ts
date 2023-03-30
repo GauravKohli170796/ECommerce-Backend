@@ -17,7 +17,7 @@ export class EmailService {
         host: "smtp.gmail.com",
         auth: {
           user: "harshsaxena9411@gmail.com",
-          pass: "cltaqddmbfvamgos"
+          pass: "xegknqsdhhxfeuhv"
         }
       })
     );
@@ -26,6 +26,8 @@ export class EmailService {
   sendOtp(emailBody: IEmailBody): Promise<boolean> {
     let mailMessage = "";
     let mailSubject = "";
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const ref = this;
     // TODO document why this block is empty
 
     if (emailBody.type === EmailTypes.SIGNUP) {
@@ -43,7 +45,7 @@ export class EmailService {
     };
     return new Promise((resolve, reject) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      this.transporter.sendMail(mailOptions, function (error, info) {
+      ref.transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           reject(false);
         } else {
