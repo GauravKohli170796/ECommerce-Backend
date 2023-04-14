@@ -1,9 +1,9 @@
 import { Inject, Injectable } from "@tsed/di";
 import { BadRequest } from "@tsed/exceptions";
 import { MongooseModel } from "@tsed/mongoose";
-import jwt, { JwtPayload, Secret } from "jsonwebtoken";
+import jwt, { Secret } from "jsonwebtoken";
 import { ROLES } from "../enums/authEnum";
-import { ILoginRequest, ISignUpRequest, ITokenPayload } from "../interfaces/authInterfaces";
+import { IJwtTokens, ILoginRequest, ISignUpRequest, ITokenPayload } from "../interfaces/authInterfaces";
 import { UserModel } from "../models/UserModel";
 
 @Injectable()
@@ -57,14 +57,36 @@ export class AuthService {
     return false;
   }
 
-  async generateJWTToken(email: string, role: ROLES): Promise<string> {
+  async generateAccessToken(email: string, role: ROLES): Promise<string> {
     const tokenPayload: ITokenPayload = { email, role };
-    const token = await jwt.sign(tokenPayload, process.env.TOKEN_KEY as Secret);
-    return token;
+    const accessToken = await jwt.sign(tokenPayload, process.env.TOKEN_KEY as Secret, { expiresIn: "7 days" });
+    return accessToken;
   }
 
-  async decodeJwtGenerate(jwtToken: string): Promise<any> {
-    const userDetails = (await jwt.verify(jwtToken, process.env.TOKEN_KEY as Secret)) as JwtPayload;
+  async generateRefreshToken(email: string, role: ROLES): Promise<string> {
+    const tokenPayload: ITokenPayload = { email, role };
+    const refreshToken = await jwt.sign(tokenPayload, process.env.REFRESH_TOKEN_KEY as Secret);
+    return refreshToken;
+  }
+
+  async generateJWTToken(email: string, role: ROLES): Promise<IJwtTokens> {
+    const accessToken = await this.generateAccessToken(email, role);
+    const refreshToken = await this.generateRefreshToken(email, role);
+    return { accessToken, refreshToken };
+  }
+
+  async generateAccessTokenFromRefreshToken(refreshToken: string) {
+    const userDetails = await this.decodeJwtGenerate(refreshToken, false);
+    const newAccessToken = await this.generateAccessToken(userDetails.email, userDetails.role);
+    return newAccessToken;
+  }
+
+  async decodeJwtGenerate(jwtToken: string, isAccess = true): Promise<ITokenPayload> {
+    if (isAccess) {
+      const userDetails = (await jwt.verify(jwtToken, process.env.TOKEN_KEY as Secret)) as ITokenPayload;
+      return userDetails;
+    }
+    const userDetails = (await jwt.verify(jwtToken, process.env.REFRESH_TOKEN_KEY as Secret)) as ITokenPayload;
     return userDetails;
   }
 }

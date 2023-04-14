@@ -1,45 +1,115 @@
+import { CollectionOf, Enum, Property, Required } from "@tsed/schema";
 import { SIZES } from "../enums/productEnums";
 
-export interface IAddProductRequest {
+export class IAddProductRequest {
+  @Property()
+  @Required()
   name: string;
+
+  @Property()
+  @Required()
   description: string;
+
+  @Property()
+  @Required()
   price: number;
+
+  @Property()
+  @Required()
   category: string;
+
+  @Property()
+  @Required()
   quantity: number;
-  images?: string[];
+
+  @Property()
+  @Required()
+  @CollectionOf(String)
+  images: Set<string>;
+
+  @Property()
+  @Required()
   discount?: number;
+
+  @Property()
+  @Required()
   productDetails: unknown;
+
+  @Property()
+  @Required()
   colors: string[];
-  sizes: string[];
+
+  @Property()
+  @Required()
+  @Enum(SIZES)
+  sizes: Set<string>;
 }
-export interface IUpdateProductRequest {
-  name?: string;
-  description?: string;
-  price?: number;
-  category?: string;
-  quantity?: number;
+export class IUpdateProductRequest {
+  @Property()
+  name: string;
+
+  @Property()
+  description: string;
+
+  @Property()
+  price: number;
+
+  @Property()
+  category: string;
+
+  @Property()
+  quantity: number;
+
+  @Property()
   images?: string[];
+
+  @Property()
   discount?: number;
+
+  @Property()
   productDetails?: unknown;
+
+  @Property()
   colors?: string[];
-  sizes?: string[];
+
+  @Property()
+  @Enum(SIZES)
+  sizes?: SIZES[];
 }
 
-export interface ICartItem {
+export class ICartItem {
+  @Property()
+  @Required()
   productId: string;
+
+  @Property()
+  @Required()
   quantity: number;
+
+  @Property()
+  @Required()
   color: string;
+
+  @Property()
+  @Required()
+  @Enum(SIZES)
   size: SIZES;
 }
 
-export interface ICartUpdateReq {
+export class ICartUpdateReq {
+  @Property()
+  @Required()
   quantity: number;
 }
 
-export interface IWishListItem {
+export class IWishListItem {
+  @Property()
+  @Required()
   productId: string;
 }
 
-export interface ICategoryReq {
+export class ICategoryReq {
+  @Property()
+  @Required()
   category: string;
 }

@@ -32,7 +32,7 @@ export class OrderModel {
   @Required()
   @Enum(ORDER_STATUS)
   @Default(ORDER_STATUS.NotAccepted)
-  orderStatus: ORDER_STATUS;
+  orderStatus: string;
 
   @Property()
   @Default(new Date())

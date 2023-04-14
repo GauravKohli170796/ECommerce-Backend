@@ -19,7 +19,8 @@ export class OrderService {
   async getAllUserOrders(email: string): Promise<OrderModel[]> {
     return this.orderModel
       .find({ email: email })
-      .populate("productIds", { name: 1, description: 1, images: { $slice: 1 } });
+      .populate("productIds", { name: 1, description: 1, images: { $slice: 1 } })
+      .populate("addressId", { addressLine1: 1, addressLine2: 1, pinCode: 1, city: 1, state: 1 });
   }
 
   async getOrdersByOrderId(orderId: string): Promise<OrderModel | null> {
@@ -71,7 +72,12 @@ export class OrderService {
   }
 
   async addOrder(userDetails: ITokenPayload, order: IAddOrderRequest): Promise<OrderModel> {
-    const orderDetails = await this.orderModel.create(order);
+    const orderDetails = await this.orderModel.create({
+      email: order.email,
+      addressId: order.addressId,
+      productIds: [...order.productIds],
+      productDetails: [...order.productDetails]
+    });
     await this.cartService.deleteUserCart(userDetails.email);
     this.emailService
       .sendOrderDetails(userDetails, orderDetails)

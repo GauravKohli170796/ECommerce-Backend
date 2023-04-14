@@ -2,7 +2,7 @@ import { MultipartFile, PlatformMulterFile } from "@tsed/common";
 import { Controller, Inject } from "@tsed/di";
 import { BodyParams, PathParams, QueryParams } from "@tsed/platform-params";
 import { Delete, Description, Get, Post, Put, Required } from "@tsed/schema";
-import { IAddProductRequest, ICategoryReq } from "../../interfaces/productInterface";
+import { IAddProductRequest, ICategoryReq, IUpdateProductRequest } from "../../interfaces/productInterface";
 import { ProductModel } from "../../models/ProductModel";
 import { CloudinaryService } from "../../services/CloudinaryService";
 import { ProductService } from "../../services/ProductService";
@@ -62,7 +62,7 @@ export class ProductController {
   }
 
   @Put("/updateProduct/:id")
-  updateProduct(@PathParams("id") @Required() id: string, @BodyParams() @Required() product: IAddProductRequest) {
+  updateProduct(@PathParams("id") @Required() id: string, @BodyParams() @Required() product: IUpdateProductRequest) {
     return this.productService.updateProduct(id, product);
   }
 

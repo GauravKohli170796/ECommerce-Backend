@@ -1,22 +1,57 @@
+import { CollectionOf, Email, Enum, Property, Required } from "@tsed/schema";
 import { ORDER_STATUS } from "../enums/orderEnum";
 import { SIZES } from "../enums/productEnums";
 
-export interface IProductDetails {
+export class IProductDetails {
+  @Property()
+  @Required()
   productId: string;
+
+  @Property()
+  @Required()
   quantity: number;
+
+  @Property()
+  @Required()
   price: number;
+
+  @Property()
+  @Required()
   color: string;
-  size: SIZES;
+
+  @Property()
+  @Required()
+  @Enum(SIZES)
+  size: string;
 }
 
-export interface IAddOrderRequest {
+export class IAddOrderRequest {
+  @Property()
+  @Email()
   email: string;
+
+  @Property()
+  @Required()
   addressId: string;
-  productIds: string[];
-  productDetails: IProductDetails[];
-  orderStatus?: ORDER_STATUS;
+
+  @Property()
+  @Required()
+  @CollectionOf(String)
+  productIds: Set<string>;
+
+  @Property()
+  @Required()
+  @CollectionOf(IProductDetails)
+  productDetails: Set<IProductDetails>;
+
+  @Property()
+  @Enum(ORDER_STATUS)
+  orderStatus: ORDER_STATUS;
 }
 
-export interface IUpdateOrderStatus {
+export class IUpdateOrderStatus {
+  @Property()
+  @Required()
+  @Enum(ORDER_STATUS)
   orderStatus: ORDER_STATUS;
 }

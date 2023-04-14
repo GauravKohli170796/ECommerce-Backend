@@ -4,6 +4,7 @@ import { Configuration, Inject } from "@tsed/di";
 import "@tsed/mongoose";
 import "@tsed/platform-express"; // /!\ keep this import
 import "@tsed/swagger";
+
 import bodyParser from "body-parser";
 import compress from "compression";
 import cookieParser from "cookie-parser";
