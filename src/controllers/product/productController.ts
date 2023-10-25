@@ -1,8 +1,10 @@
-import { MultipartFile, PlatformMulterFile } from "@tsed/common";
+import { MultipartFile, PlatformMulterFile, UseBefore } from "@tsed/common";
 import { Controller, Inject } from "@tsed/di";
 import { BodyParams, PathParams, QueryParams } from "@tsed/platform-params";
 import { Delete, Description, Get, Post, Put, Required } from "@tsed/schema";
 import { IAddProductRequest, ICategoryReq, IUpdateProductRequest } from "../../interfaces/productInterface";
+import { AdminMiddleware } from "../../middlewares/AdminMiddleware";
+import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
 import { ProductModel } from "../../models/ProductModel";
 import { CloudinaryService } from "../../services/CloudinaryService";
 import { ProductService } from "../../services/ProductService";
@@ -41,6 +43,8 @@ export class ProductController {
   }
 
   @Put("/addNewCategories")
+  @UseBefore(AuthMiddleware)
+  @UseBefore(AdminMiddleware)
   addNewCategories(@BodyParams() @Required() categoryReq: ICategoryReq) {
     return this.productService.addCategory(categoryReq.category);
   }
@@ -52,22 +56,33 @@ export class ProductController {
   }
 
   @Post("/addProduct")
+  @UseBefore(AuthMiddleware)
+  @UseBefore(AdminMiddleware)
   async addProduct(@BodyParams() @Required() product: IAddProductRequest) {
     return this.productService.addProduct(product);
   }
 
   @Post("/uploadFile")
-  uploadFile(@MultipartFile("images") @Required images: PlatformMulterFile[]) {
+  @UseBefore(AuthMiddleware)
+  @UseBefore(AdminMiddleware)
+  uploadFile(@MultipartFile("images") @Required() images: PlatformMulterFile[]) {
     return this.cloudinaryService.uploadResource(images);
   }
 
   @Put("/updateProduct/:id")
+  @UseBefore(AuthMiddleware)
+  @UseBefore(AdminMiddleware)
   updateProduct(@PathParams("id") @Required() id: string, @BodyParams() @Required() product: IUpdateProductRequest) {
     return this.productService.updateProduct(id, product);
   }
 
   @Delete("/deleteProduct/:id")
-  deleteProduct(@PathParams("id") @Required() id: string) {
-    return this.productService.deleteProduct(id);
+  @UseBefore(AuthMiddleware)
+  @UseBefore(AdminMiddleware)
+  deleteProduct(
+    @PathParams("id") @Required() id: string,
+    @BodyParams("imagesToDelete") @Required() imagesToDelete: string[]
+  ) {
+    return this.productService.deleteProduct(id, imagesToDelete);
   }
 }

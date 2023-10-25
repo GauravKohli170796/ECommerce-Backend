@@ -4,6 +4,7 @@ import { MongooseModel } from "@tsed/mongoose";
 import { IAddProductRequest, IUpdateProductRequest } from "../interfaces/productInterface";
 import { CategoryModel } from "../models/CategoryModel";
 import { ProductModel } from "../models/ProductModel";
+import { CloudinaryService } from "./CloudinaryService";
 
 @Injectable()
 export class ProductService {
@@ -56,7 +57,8 @@ export class ProductService {
     return await this.productModel.updateOne({ _id: id }, { $set: { ...product, updatedAt: new Date() } });
   }
 
-  async deleteProduct(id: string): Promise<unknown> {
+  async deleteProduct(id: string, imagesToDelete: string[]): Promise<unknown> {
+    await CloudinaryService.deleteResource(imagesToDelete);
     const deleteResponse = await this.productModel.deleteOne({ _id: id });
     if (deleteResponse.deletedCount === 0) {
       throw new NotFound("Product not found with this id");

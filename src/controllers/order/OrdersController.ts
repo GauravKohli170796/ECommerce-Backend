@@ -5,6 +5,7 @@ import { Get, Post, Put, Required } from "@tsed/schema";
 import { ORDER_STATUS } from "../../enums/orderEnum";
 import { ITokenPayload } from "../../interfaces/authInterfaces";
 import { IAddOrderRequest, IUpdateOrderStatus } from "../../interfaces/orderInterfaces";
+import { AdminMiddleware } from "../../middlewares/AdminMiddleware";
 import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
 import { OrderService } from "../../services/OrderService";
 
@@ -19,12 +20,14 @@ export class OrdersController {
   }
 
   @Get("/getOrdersByOrderId/:orderId")
+  @UseBefore(AdminMiddleware)
   getOrdersByOrderId(@PathParams("orderId") @Required() orderId: string) {
     return this.orderService.getOrdersByOrderId(orderId);
   }
 
   //@UseBefore(AdminMiddleware)
   @Get("/getAllOrdersByStatus/:limit/:page/:orderStatus")
+  @UseBefore(AdminMiddleware)
   getAllOrdersByStatus(
     @PathParams("limit") @Required() limit: string,
     @PathParams("page") @Required() page: string,
@@ -34,6 +37,7 @@ export class OrdersController {
   }
 
   @Put("/updateOrderStatus/:orderId")
+  @UseBefore(AdminMiddleware)
   updateOrderStatus(
     @PathParams("orderId") @Required() orderId: string,
     @BodyParams() @Required() orderStatusReq: IUpdateOrderStatus

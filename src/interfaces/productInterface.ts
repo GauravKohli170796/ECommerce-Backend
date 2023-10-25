@@ -25,7 +25,7 @@ export class IAddProductRequest {
   @Property()
   @Required()
   @CollectionOf(String)
-  images: Set<string>;
+  images: string[];
 
   @Property()
   @Required()

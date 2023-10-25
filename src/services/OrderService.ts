@@ -36,9 +36,10 @@ export class OrderService {
         $facet: {
           orderDetails: [
             { $match: { orderStatus: orderStatus } },
+            { $sort: { createdAt: -1 } },
             { $skip: limit * page },
             { $limit: limit },
-            { $sort: { createdAt: -1 } }
+            { $lookup: { from: "addressmodels", localField: "addressId", foreignField: "_id", as: "addressDetails" } }
           ],
           totalOrders: [
             { $match: { orderStatus: orderStatus } },
