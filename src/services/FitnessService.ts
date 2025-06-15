@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@tsed/di";
 import { MongooseModel } from "@tsed/mongoose";
-import { FitnessModel } from "src/models/FitnessModel";
-import { IAddWalkPadDataRequest } from "src/interfaces/fitnessInterfaces";
+import { FitnessModel } from "../models/FitnessModel";
+import { IAddWalkPadDataRequest } from "../interfaces/fitnessInterfaces";
 
 @Injectable()
 export class FitnessService {
