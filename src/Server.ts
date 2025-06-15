@@ -26,7 +26,8 @@ import { config } from "./config/index";
     "/api/v1/user": [`${__dirname}/controllers/cartWishList/*.ts`],
     "/api/v1/email": [`${__dirname}/controllers/email/*.ts`],
     "/api/v1/orders": [`${__dirname}/controllers/order/*.ts`],
-    "/api/v1/address": [`${__dirname}/controllers/address/*.ts`]
+    "/api/v1/address": [`${__dirname}/controllers/address/*.ts`],
+    "/api/v1/fitness": [`${__dirname}/controllers/fitness/*.ts`]
   },
   swagger: [
     {
