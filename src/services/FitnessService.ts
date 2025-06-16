@@ -5,34 +5,89 @@ import { IAddWalkPadDataRequest } from "../interfaces/fitnessInterfaces";
 
 @Injectable()
 export class FitnessService {
-  constructor(@Inject(FitnessModel) private fitnessModel: MongooseModel<FitnessModel>) {}
-
-//   async getUserCartItems(email: string): Promise<unknown> {
-//     const response = await this.fitnessModel
-//       .find({ email: email })
-//       .populate("productId", { name: 1, description: 1, price: 1, discount: 1, images: { $slice: 1 } });
-//     return response;
-//   }
+  constructor(@Inject(FitnessModel) private fitnessModel: MongooseModel<FitnessModel>) { }
 
   async addFitnessData(email: string, fitnessData: IAddWalkPadDataRequest): Promise<unknown> {
     const addFitnessData = { email, ...fitnessData };
     return await this.fitnessModel.create(addFitnessData);
   }
 
-//   async updateItemOfUserCart(email: string, id: string, cartItem: ICartUpdateReq): Promise<unknown> {
-//     return await this.cartModel.updateOne({ _id: id, email: email }, { $set: { ...cartItem } });
-//   }
+  async getFitnessMetrics(email: string, limit: number, page: number): Promise<unknown> {
+    const now = new Date();
+    const sevenDaysAgo = new Date(now);
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-//   async deleteItemFromUserCart(email: string, id: string): Promise<unknown> {
-//     const deleteResponse = await this.cartModel.deleteOne({ id: id, email: email });
-//     if (deleteResponse.deletedCount === 0) {
-//       throw new NotFound("Cart Item not found with this id");
-//     }
-//     return deleteResponse;
-//   }
+    const thirtyDaysAgo = new Date(now);
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-//   async deleteUserCart(email: string): Promise<unknown> {
-//     const deleteResponse = await this.cartModel.deleteMany({ email: email });
-//     return deleteResponse;
-//   }
+    return await this.fitnessModel.aggregate([
+      {
+        $match: { email }
+      },
+      {
+        $facet: {
+          last30Entries: [
+            { $sort: { walkDateTime: -1 } },
+            { $skip: limit * page },
+            { $limit: limit },
+            {
+              $group: {
+                _id: null,
+                totalDistance: { $sum: "$distanceKm" },
+                totalDuration: { $sum: "$durationMinutes" },
+                totalCalories: { $sum: "$caloriesBurned" },
+                records: { $push: "$$ROOT" } // Keep all document data
+              }
+            }
+          ],
+          last7Days: [
+            {
+              $match: {
+                walkDateTime: { $gte: sevenDaysAgo }
+              }
+            },
+            {
+              $group: {
+                _id: null,
+                totalDistance: { $sum: "$distanceKm" },
+                totalDuration: { $sum: "$durationMinutes" },
+                totalCalories: { $sum: "$caloriesBurned" }
+              }
+            }
+          ],
+          // Last 30 Days Metrics
+          last30Days: [
+            {
+              $match: {
+                walkDateTime: { $gte: thirtyDaysAgo }
+              }
+            },
+            {
+              $group: {
+                _id: null,
+                totalDistance: { $sum: "$distanceKm" },
+                totalDuration: { $sum: "$durationMinutes" },
+                totalCalories: { $sum: "$caloriesBurned" }
+              }
+            }
+          ],
+          // All-Time Metrics
+          allTime: [
+            {
+              $group: {
+                _id: null,
+                totalDistance: { $sum: "$distanceKm" },
+                totalDuration: { $sum: "$durationMinutes" },
+                totalCalories: { $sum: "$caloriesBurned" }
+              }
+            }
+          ],
+          totalCount: [
+            { $count: "count" }
+          ],
+        }
+      }
+    ]);
+  }
+
 }
