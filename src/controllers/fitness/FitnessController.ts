@@ -16,9 +16,21 @@ export class FitnessController {
     return this.fitnessService.addFitnessData(userDetails.email, fitnessData);
   }
 
-  @Get("/getFitnessData/:limit/:page")
-  getFitnessData(@PathParams("limit") @Required() limit: string, @PathParams("page") @Required() page: string, @Req() req: Req) {
+  @Get("/getFitnessMetrics")
+  getFitnessMetrics(@Req() req: Req) {
     const userDetails = req.user as ITokenPayload;
-    return this.fitnessService.getFitnessMetrics(userDetails.email, parseInt(limit), parseInt(page));
+    return this.fitnessService.getFitnessMetrics(userDetails.email);
+  }
+
+  @Get("/getFitnessData/:limit/:page/:sortRule")
+  getFitnessData(@PathParams("limit") @Required() limit: string, @PathParams("page") @Required() page: string, @PathParams("sortRule") @Required() sortRule: string, @Req() req: Req) {
+    const userDetails = req.user as ITokenPayload;
+    return this.fitnessService.getFitnessData(userDetails.email, parseInt(limit), parseInt(page), sortRule);
+  }
+
+  @Get("/getFitnessMonthCalender/:startDate/:endDate")
+  getFitnessMonthCalender(@PathParams("startDate") @Required() startDate: string, @PathParams("endDate") @Required() endDate: string, @Req() req: Req) {
+    const userDetails = req.user as ITokenPayload;
+    return this.fitnessService.getFitnessMonthCalender(userDetails.email, startDate, endDate);
   }
 }

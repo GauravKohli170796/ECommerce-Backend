@@ -12,34 +12,19 @@ export class FitnessService {
     return await this.fitnessModel.create(addFitnessData);
   }
 
-  async getFitnessMetrics(email: string, limit: number, page: number): Promise<unknown> {
+  async getFitnessMetrics(email: string): Promise<unknown> {
     const now = new Date();
     const sevenDaysAgo = new Date(now);
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     const thirtyDaysAgo = new Date(now);
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
     return await this.fitnessModel.aggregate([
       {
         $match: { email }
       },
       {
         $facet: {
-          last30Entries: [
-            { $sort: { walkDateTime: -1 } },
-            { $skip: limit * page },
-            { $limit: limit },
-            {
-              $group: {
-                _id: null,
-                totalDistance: { $sum: "$distanceKm" },
-                totalDuration: { $sum: "$durationMinutes" },
-                totalCalories: { $sum: "$caloriesBurned" },
-                records: { $push: "$$ROOT" } // Keep all document data
-              }
-            }
-          ],
           last7Days: [
             {
               $match: {
@@ -88,6 +73,41 @@ export class FitnessService {
         }
       }
     ]);
+  }
+
+  async getFitnessData(email: string, limit: number, page: number, sortRule: string): Promise<unknown> {
+    const columnMapping: { [key: string]: [string, 1 | -1] } = {
+      clh: ['caloriesBurned', 1],
+      chl: ['caloriesBurned', -1],
+      dlh: ['distanceKm', 1],
+      dhl: ['distanceKm', -1],
+      dulh: ['durationMinutes', 1],
+      duhl: ['durationMinutes', -1],
+    };
+    const sortField = columnMapping[sortRule]?.[0] ?? "walkDateTime";
+    const sortOrder = columnMapping[sortRule]?.[1] ?? -1;
+    return await this.fitnessModel
+      .find({ email })
+      .sort({ [sortField]: sortOrder })
+      .skip(limit * page)
+      .limit(limit);
+
+  }
+
+  async getFitnessMonthCalender(email: string, startDateStr: string, endDateStr: string): Promise<unknown> {
+    const startDate = new Date(startDateStr);
+    startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date(endDateStr);
+    endDate.setHours(23, 59, 59, 999);
+
+    return await this.fitnessModel.find({
+      email: email,
+      walkDateTime: {
+        $gte: startDate,
+        $lte: endDate
+      }
+    });
   }
 
 }
