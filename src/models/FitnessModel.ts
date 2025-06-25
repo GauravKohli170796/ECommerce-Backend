@@ -1,5 +1,5 @@
 import { Model, ObjectID } from "@tsed/mongoose";
-import { Property, Required, Description } from "@tsed/schema";
+import { Property, Required, Description, Default } from "@tsed/schema";
 
 @Model()
 export class FitnessModel {
@@ -30,6 +30,25 @@ export class FitnessModel {
   @Property()
   @Description("Calories burned during the session")
   caloriesBurned?: number;
+
+  @Property()
+  @Required()
+  @Description("Total distance walked in kilometers")
+  @Default(1)
+  goalDistanceKm: number;
+
+  @Property()
+  @Required()
+  @Description("Total duration of the walk in minutes")
+  @Default(30)
+  goalDurationMinutes: number;
+
+
+  @Property()
+  @Required()
+  @Description("Calories burned during the session")
+  @Default(50)
+  goalCaloriesBurned?: number;
 
 
   @Property()
