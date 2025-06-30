@@ -43,6 +43,12 @@ export class FitnessModel {
   @Default(30)
   goalDurationMinutes: number;
 
+  @Property()
+  @Required()
+  @Description("Total duration of the walk in minutes")
+  @Default(2000)
+  goalStepsWalk: number;
+
 
   @Property()
   @Required()
@@ -54,4 +60,37 @@ export class FitnessModel {
   @Property()
   @Description("Optional note or tag for the session")
   note?: string;
+}
+@Model()
+export class GoalsModel {
+  @ObjectID("_id")
+  _id: string;
+
+  @Property()
+  @Description("The user's email or unique identifier")
+  @Required()
+  email: string;
+
+
+  @Property()
+  @Required()
+  @Description("Total distance walked in kilometers")
+  goalDistanceKm: number;
+
+  @Property()
+  @Required()
+  @Description("Total duration of the walk in minutes")
+  goalDurationMinutes: number;
+
+
+  @Property()
+  @Required()
+  @Description("Calories burned during the session")
+  goalCaloriesBurned: number;
+
+  @Property()
+  @Required()
+  @Description("Calories burned during the session")
+  goalStepsWalk: number;
+
 }

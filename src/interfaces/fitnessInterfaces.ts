@@ -18,4 +18,38 @@ export class IAddWalkPadDataRequest {
   @Property()
   @Required()
   walkDateTime: Date;
+
+  @Property()
+  @Required()
+  goalDurationMinutes: number;
+
+  @Property()
+  @Required()
+  goalDistanceKm: number;
+
+  @Property()
+  @Required()
+  goalCaloriesBurned: number;
+
+  @Property()
+  @Required()
+  goalStepsWalk: number;
+}
+export class IGoalsDataRequest {
+  @Property()
+  @Required()
+  goalDurationMinutes: number;
+
+  @Property()
+  @Required()
+  goalDistanceKm: number;
+
+  @Property()
+  @Required()
+  goalCaloriesBurned: number;
+
+  @Property()
+  @Required()
+  goalStepsWalk: number;
+
 }

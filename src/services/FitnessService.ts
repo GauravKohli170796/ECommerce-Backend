@@ -1,11 +1,11 @@
 import { Inject, Injectable } from "@tsed/di";
 import { MongooseModel } from "@tsed/mongoose";
-import { FitnessModel } from "../models/FitnessModel";
-import { IAddWalkPadDataRequest } from "../interfaces/fitnessInterfaces";
+import { FitnessModel, GoalsModel } from "../models/FitnessModel";
+import { IAddWalkPadDataRequest, IGoalsDataRequest } from "../interfaces/fitnessInterfaces";
 
 @Injectable()
 export class FitnessService {
-  constructor(@Inject(FitnessModel) private fitnessModel: MongooseModel<FitnessModel>) { }
+  constructor(@Inject(FitnessModel) private fitnessModel: MongooseModel<FitnessModel>, @Inject(GoalsModel) private goalsModel: MongooseModel<GoalsModel>) { }
 
   async addFitnessData(email: string, fitnessData: IAddWalkPadDataRequest): Promise<unknown> {
     const addFitnessData = { email, ...fitnessData };
@@ -36,7 +36,12 @@ export class FitnessService {
                 _id: null,
                 totalDistance: { $sum: "$distanceKm" },
                 totalDuration: { $sum: "$durationMinutes" },
-                totalCalories: { $sum: "$caloriesBurned" }
+                totalCalories: { $sum: "$caloriesBurned" },
+                goalCaloriesBurned: { $sum: "$goalCaloriesBurned" },
+                goalDistanceKm: { $sum: "$goalDistanceKm" },
+                goalDurationMinutes: { $sum: "$goalDurationMinutes" },
+                goalStepsWalk: { $sum: "$goalStepsWalk" },
+                totalDays: { $sum: 1 },
               }
             }
           ],
@@ -52,7 +57,12 @@ export class FitnessService {
                 _id: null,
                 totalDistance: { $sum: "$distanceKm" },
                 totalDuration: { $sum: "$durationMinutes" },
-                totalCalories: { $sum: "$caloriesBurned" }
+                totalCalories: { $sum: "$caloriesBurned" },
+                goalCaloriesBurned: { $sum: "$goalCaloriesBurned" },
+                goalDistanceKm: { $sum: "$goalDistanceKm" },
+                goalDurationMinutes: { $sum: "$goalDurationMinutes" },
+                goalStepsWalk: { $sum: "$goalStepsWalk" },
+                totalDays: { $sum: 1 },
               }
             }
           ],
@@ -63,7 +73,12 @@ export class FitnessService {
                 _id: null,
                 totalDistance: { $sum: "$distanceKm" },
                 totalDuration: { $sum: "$durationMinutes" },
-                totalCalories: { $sum: "$caloriesBurned" }
+                totalCalories: { $sum: "$caloriesBurned" },
+                goalCaloriesBurned: { $sum: "$goalCaloriesBurned" },
+                goalDistanceKm: { $sum: "$goalDistanceKm" },
+                goalDurationMinutes: { $sum: "$goalDurationMinutes" },
+                goalStepsWalk: { $sum: "$goalStepsWalk" },
+                totalDays: { $sum: 1 },
               }
             }
           ],
@@ -108,6 +123,32 @@ export class FitnessService {
         $lte: endDate
       }
     });
+  }
+
+  async addUpdateGoalData(email: string, fitnessData: IGoalsDataRequest): Promise<unknown> {
+    return await this.goalsModel.findOneAndUpdate(
+      { email },
+      { $set: { ...fitnessData } },
+      {
+        upsert: true,
+        new: true,
+        runValidators: true
+      }
+    );
+  }
+  async getGoalData(email: string): Promise<unknown> {
+    const data = await this.goalsModel.findOne({ email }).lean();
+    if (!data) {
+      return {
+        email,
+        goalDurationMinutes: 30,
+        goalDistanceKm: 2,
+        goalCaloriesBurned: 50,
+        goalStepsWalk: 2000,
+      };
+    }
+
+    return data;
   }
 
 }
